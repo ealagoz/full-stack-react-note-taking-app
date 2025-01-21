@@ -63,10 +63,11 @@ VITE_API_ENDPOINTS_GET_NOTES=/
 VITE_API_ENDPOINTS_ADD_NOTE=/add-note
 VITE_API_ENDPOINTS_UPDATE_NOTE=/update-note
 VITE_API_ENDPOINTS_DELETE_NOTE=/delete-note
-```
 
 ### API Configuration
+
 Located in `frontend/cliqs-react-app/src/config/api.config.js`:
+
 ```bash
 export const API_CONFIG = {
   BASE_URL: import.meta.env.VITE_API_BASE_URL,
@@ -77,7 +78,6 @@ export const API_CONFIG = {
     DELETE_NOTE: import.meta.env.VITE_API_ENDPOINTS_DELETE_NOTE,
   },
 };
-```
 
 This configuration enables:
 - Centralized API endpoint management
@@ -176,3 +176,5 @@ The application is set up for a smooth development experience with:
 ## License
 
 MIT License
+
+This README provides a comprehensive overview of the application structure, setup instructions, and features. It can be placed in the root directory of your project.
