@@ -1,4 +1,5 @@
 import "./index.css";
+import { API_CONFIG } from "./config/api_config";
 import { MdNoteAlt } from "react-icons/md";
 import { useState, useEffect } from "react";
 import FetchNotes from "./components/FetchNotes";
@@ -13,7 +14,7 @@ export default function App() {
   // Fetch data function
   const fetchData = async () => {
     try {
-      const response = await fetch("/api/");
+      const response = await fetch(API_CONFIG.BASE_URL);
       const result = await response.json();
       setData(result);
       setLoading(false);

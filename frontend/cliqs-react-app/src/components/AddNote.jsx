@@ -1,63 +1,64 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useForm } from "react-hook-form";
+import { API_CONFIG } from "../config/api_config";
 
 export default function AddNote({ onSubmit }) {
-  // States for form data
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
+  // Submitting state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // React-hook-form
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {
+      title: "",
+      content: "",
+    },
   });
 
-  // Handle for form input data
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
   // Handle for submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onAddNote = async (data) => {
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/add-note", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ADD_NOTE}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      // Check add note response
+      if (!response.ok) {
+        throw new Error(`Failed to add note. Status: ${response.status}`);
+      }
 
       await response.json();
-      // Clear form after successful submission
-      setFormData({ title: "", content: "" });
-
-      // Re-render page for all notes
+      // Reset & re-render page for all notes
+      reset();
       onSubmit();
     } catch (error) {
       console.error("Error: ", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onAddNote)}>
       <input
         type="text"
-        name="title"
-        value={formData.title}
-        onChange={handleChange}
+        {...register("title", { required: true })}
         placeholder="Note title"
-        required
       />
       <textarea
-        name="content"
-        value={formData.content}
-        onChange={handleChange}
+        {...register("content", { required: true })}
         placeholder="Note content"
-        required
       />
-      <button type="submit">Add Note</button>
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Adding..." : "Add Note"}
+      </button>
     </form>
   );
 }

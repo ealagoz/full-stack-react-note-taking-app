@@ -1,86 +1,74 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { FaEdit } from "react-icons/fa";
+import { API_CONFIG } from "../config/api_config";
 export default function EditNote({ note, reRender }) {
   // State for editing notes
   const [editingId, setEditingId] = useState(null);
-  const [editFormData, setEditFormData] = useState({
-    title: note.title,
-    content: note.content,
+  // Loading state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // React-hook-form for form data management
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {
+      title: note.title,
+      content: note.content,
+    },
   });
 
   // Handle edit
   const handleEdit = () => {
     setEditingId(note.id);
-    setEditFormData({
+    reset({
       title: note.title,
       content: note.content,
     });
   };
 
   // Handle update function
-  const handleUpdateNote = async () => {
+  const handleUpdateNote = async (data) => {
+    // Load state true
+    setIsSubmitting(true);
     try {
-      const response = await fetch("/api/update-note", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          note_id: note.id,
-          title: editFormData.title,
-          content: editFormData.content,
-        }),
-      });
-
+      const response = await fetch(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.UPDATE_NOTE}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            note_id: note.id,
+            title: data.title,
+            content: data.content,
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
       await response.json();
       reRender();
       setEditingId(null);
     } catch (error) {
       console.log("Error details:", error);
-      console.log("Request payload:", {
-        note_id: note.id,
-        title: editFormData.title,
-        content: editFormData.content,
-      });
+    } finally {
+      setIsSubmitting(false);
     }
-  }; // Handle updated note submit
-  const handleUpdatedNoteSubmit = (e) => {
-    e.preventDefault();
-    handleUpdateNote();
-  };
-
-  // Handle new imput change
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
   return (
     <>
       {editingId === note.id ? (
-        <form onSubmit={handleUpdatedNoteSubmit}>
-          <input
-            type="text"
-            name="title"
-            value={editFormData.title}
-            onChange={handleInputChange}
-            required
-          />
+        <form onSubmit={handleSubmit(handleUpdateNote)}>
+          <input type="text" {...register("title", { required: true })} />
           <textarea
             name="content"
-            value={editFormData.content}
-            onChange={handleInputChange}
-            required
+            {...register("content", { required: true })}
           />
-          <button type="sumit">Save</button>
+          <button type="sumit" disabled={isSubmitting}>
+            {isSubmitting ? "Saving..." : `Save`}
+          </button>
         </form>
       ) : (
         <button className="edit-button" onClick={handleEdit}>
