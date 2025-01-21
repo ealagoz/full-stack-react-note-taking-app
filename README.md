@@ -57,11 +57,13 @@ The application uses environment variables for API endpoint configuration:
 
 Located in `frontend/cliqs-react-app/.env`:
 
+```bash 
 VITE_API_BASE_URL=/api
 VITE_API_ENDPOINTS_GET_NOTES=/
 VITE_API_ENDPOINTS_ADD_NOTE=/add-note
 VITE_API_ENDPOINTS_UPDATE_NOTE=/update-note
 VITE_API_ENDPOINTS_DELETE_NOTE=/delete-note
+```
 
 ### API Configuration
 
