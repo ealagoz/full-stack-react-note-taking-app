@@ -182,5 +182,3 @@ The application is set up for a smooth development experience with:
 ## License
 
 MIT License
-
-This README provides a comprehensive overview of the application structure, setup instructions, and features. It can be placed in the root directory of your project.
