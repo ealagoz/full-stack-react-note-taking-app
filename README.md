@@ -65,8 +65,13 @@ VITE_API_ENDPOINTS_DELETE_NOTE=/delete-note
 
 ### API Configuration
 
-Located in `frontend/cliqs-react-app/src/config/api.config.js`:
+The `api.config.js` file centralizes all API endpoint configurations for the application.
 
+### Location
+`frontend/cliqs-react-app/src/config/api.config.js`:
+
+### Configuration Structure
+```javascript
 export const API_CONFIG = {
   BASE_URL: import.meta.env.VITE_API_BASE_URL,
   ENDPOINTS: {
