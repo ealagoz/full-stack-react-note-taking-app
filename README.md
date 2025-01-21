@@ -81,6 +81,7 @@ export const API_CONFIG = {
     DELETE_NOTE: import.meta.env.VITE_API_ENDPOINTS_DELETE_NOTE,
   },
 };
+```
 
 This configuration enables:
 - Centralized API endpoint management
