@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "fastapi-backend"
 version = "0.1.0"
-description = "FastAPI backend for CLIQS app"
-authors = ["Enver Alagoz enver.alagoz@uib.no"]
+description = "FastAPI backend for React Note Taking app"
+authors = ["Name Surname name.surname@name.com"]
 readme = "README.md"
 packages = [{include = "fastapi_backend"}]
 
